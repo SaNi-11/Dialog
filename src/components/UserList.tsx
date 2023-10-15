@@ -1,58 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import useSWR from 'swr';
 import { User } from '../types/User';
 import UserDetailsDialog from './UserDetailsDialog';
+import UseDialogModal from '../hooks/UseDialogModal';
 
 const UserList: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const { selectedUser, openModal, closeModal } = UseDialogModal();
+  const [searchText, setSearchText] = useState('');
 
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const { data: users, error } = useSWR<User[]>('users', async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data: User[] = await response.json();
+    return data;
+  });
 
-  const openDialog = (user: User) => {
-    setSelectedUser(user);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
   };
-
-  const closeDialog = () => {
-    setSelectedUser(null);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          'https://jsonplaceholder.typicode.com/users'
-        );
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data: User[] = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error('Greška pri učitavanju korisnika', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div>
       <h1 className="flex items-center justify-center my-8">Korisnici</h1>
-      <div className="flex items-center justify-center">
-        <ul>
-          {users.map((user) => (
-            <li key={user.id} className="my-1">
-              <button
-                onClick={() => openDialog(user)}
-                className="underline text-sky-400"
-              >
-                {user.name} {user.username}
-              </button>
-            </li>
-          ))}
-        </ul>
+      <div className="flex items-center justify-center ">
+        <input
+          type="text"
+          onChange={handleSearch}
+          placeholder="Pretraga po imenu ili email-u"
+          className="mb-4 p-2 border rounded-sm border-black focus:rounded-sm "
+        />
       </div>
-      {/* <span>Should dialog be open: {selectedUser ? 'yes' : 'no'}</span> */}
-      <UserDetailsDialog user={selectedUser} onClose={closeDialog} />
+      <div className="flex items-center justify-center">
+        {error ? (
+          <div>Error loading data</div>
+        ) : !users ? (
+          <div>Loading data...</div>
+        ) : (
+          <ul>
+            {users
+              .filter(
+                (user) =>
+                  user.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                  user.email.toLowerCase().includes(searchText.toLowerCase())
+              )
+              .map((user) => (
+                <li key={user.id} className="my-1">
+                  <button
+                    onClick={() => openModal(user)}
+                    className="underline text-sky-400"
+                  >
+                    {user.name} {user.username} {user.email}
+                  </button>
+                </li>
+              ))}
+          </ul>
+        )}
+      </div>
+      <UserDetailsDialog user={selectedUser} onClose={closeModal} />
     </div>
   );
 };
