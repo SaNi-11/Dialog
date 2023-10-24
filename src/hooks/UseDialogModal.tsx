@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { User } from '../types/User';
 
 function UseDialogModal() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = (user: User) => {
     setSelectedUser(user);
@@ -18,4 +18,5 @@ function UseDialogModal() {
   return { selectedUser, isModalOpen, openModal, closeModal };
 }
 
+//HOC
 export default UseDialogModal;
