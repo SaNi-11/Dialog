@@ -1,22 +1,18 @@
-import { useState } from 'react';
-import { User } from '../types/User';
+// import { useState } from 'react';
 
-function UseDialogModal() {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+// function UseDialogModal() {
+//   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = (user: User) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
-  };
+//   const openModal = () => {
+//     setIsModalOpen(true);
+//   };
 
-  const closeModal = () => {
-    setSelectedUser(null);
-    setIsModalOpen(false);
-  };
+//   const closeModal = () => {
+//     setIsModalOpen(false);
+//   };
 
-  return { selectedUser, isModalOpen, openModal, closeModal };
-}
+//   return { isModalOpen, openModal, closeModal };
+// }
 
-//HOC
-export default UseDialogModal;
+// //HOC
+// export default UseDialogModal;

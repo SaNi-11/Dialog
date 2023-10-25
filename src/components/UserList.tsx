@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { User } from '../types/User';
 import UserDetailsDialog from './UserDetailsDialog';
-import UseDialogModal from '../hooks/UseDialogModal';
 import UserRow from './UserRow';
+import useUserStore from '../store/useUserStore';
 
 const UserList: React.FC = () => {
-  const { selectedUser, closeModal } = UseDialogModal();
+  const { selectedUser, closeModal } = useUserStore();
   const [searchText, setSearchText] = useState('');
   const [searchTimer, setSearchTimer] = useState<number | null>(null);
 

@@ -1,10 +1,10 @@
+import useUserStore from '../store/useUserStore';
 import { User } from '../types/User';
-import UseDialogModal from '../hooks/UseDialogModal';
 
 type UserRowProp = { user: User };
 
 function UserRow({ user }: UserRowProp) {
-  const { openModal } = UseDialogModal();
+  const { openModal } = useUserStore();
   return (
     <div>
       <button
