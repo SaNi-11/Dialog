@@ -1,15 +1,14 @@
 import UserDetailsDialog from './UserDetailsDialog';
-import useUserStore from '../store/useUserStore';
 import UserSearch from './UserSearch';
+import UserInput from './UserInput';
 
 const UserList: React.FC = () => {
-  const { selectedUser, closeModal } = useUserStore();
-
   return (
     <div>
       <h1 className="flex items-center justify-center my-8">Korisnici</h1>
+      <UserInput />
       <UserSearch />
-      <UserDetailsDialog user={selectedUser} onClose={closeModal} />
+      <UserDetailsDialog />
     </div>
   );
 };
